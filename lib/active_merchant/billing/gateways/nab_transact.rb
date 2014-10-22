@@ -61,7 +61,7 @@ module ActiveMerchant #:nodoc:
           commit :purchase, build_purchase_request(money, credit_card_or_stored_id, options)
         else
           #Triggered payment for an existing stored credit card
-          options[:billing_id] = credit_card_or_stored_id.to_s
+          options[:crn] = credit_card_or_stored_id.to_s
           commit_periodic build_periodic_item(:trigger, money, nil, options)
         end
       end
@@ -172,7 +172,8 @@ module ActiveMerchant #:nodoc:
         xml.tag! 'actionType', action.to_s
         xml.tag! 'periodicType', PERIODIC_TYPES[action] if PERIODIC_TYPES[action]
         xml.tag! 'currency', options[:currency] || currency(money)
-        xml.tag! 'crn', options[:billing_id]
+        xml.tag! 'crn', options[:crn]
+        xml.tag! 'purchaseOrderNo', options[:order_id].to_s.gsub(/[ ']/, '')
 
         if credit_card
           xml.tag! 'CreditCardInfo' do
