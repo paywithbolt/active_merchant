@@ -173,6 +173,7 @@ module ActiveMerchant #:nodoc:
         xml.tag! 'periodicType', PERIODIC_TYPES[action] if PERIODIC_TYPES[action]
         xml.tag! 'currency', options[:currency] || currency(money)
         xml.tag! 'crn', options[:crn]
+		xml.tag! 'purchaseOrderNo', options[:order_id].to_s.gsub(/[ ']/, '')
         xml.tag! 'transactionReference', options[:order_id].to_s.gsub(/[ ']/, '')
 
         if credit_card
